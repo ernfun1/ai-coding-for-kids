@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's Your Study Style? - Personality Quiz Demo</title>
+    <meta name="description" content="Discover your unique study style! This interactive quiz helps high school students identify whether they're an Organizer, Collaborator, Last-Minute Hero, or Digital Native.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #ec4899;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-white: #ffffff;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-accent: #f3f4f6;
+            --border-color: #e5e7eb;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --transition-normal: 0.2s ease-out;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            color: var(--text-primary);
+        }
+
+        .quiz-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 600px;
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-white);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .quiz-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        .quiz-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--text-white);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .quiz-content {
+            padding: 2rem;
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .welcome-screen h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .welcome-screen p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .question-container {
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        .question-number {
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            text-align: left;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: attr(data-letter);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary-color);
+            color: var(--text-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .option-text {
+            margin-left: 3.5rem;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+        }
+
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .results-screen.active {
+            display: block;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .result-subtitle {
+            font-size: 1.25rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .result-description {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .result-traits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .trait {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .trait-icon {
+            font-size: 1.5rem;
+            color: var(--success-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .trait-text {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--radius-lg);
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--text-white);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: var(--text-white);
+        }
+
+        .quiz-footer {
+            background: var(--bg-secondary);
+            padding: 1rem 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-counter {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .share-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            color: var(--text-white);
+            transition: all var(--transition-normal);
+        }
+
+        .share-twitter { background: #1da1f2; }
+        .share-facebook { background: #4267b2; }
+        .share-linkedin { background: #0077b5; }
+        .share-copy { background: var(--success-color); }
+
+        .share-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .quiz-container {
+                margin: 0.5rem;
+                min-height: auto;
+            }
+
+            .quiz-header {
+                padding: 1.5rem;
+            }
+
+            .quiz-title {
+                font-size: 1.5rem;
+            }
+
+            .quiz-content {
+                padding: 1.5rem;
+            }
+
+            .question-text {
+                font-size: 1.125rem;
+            }
+
+            .result-title {
+                font-size: 1.5rem;
+            }
+
+            .result-traits {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-footer {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--text-white);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <div class="quiz-icon">🧠</div>
+            <h1 class="quiz-title">What's Your Study Style?</h1>
+            <p class="quiz-subtitle">Discover your unique learning approach!</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="quiz-content">
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+                <h2>Ready to discover your study personality? 📚</h2>
+                <p>
+                    This quick 5-question quiz will help you understand your unique learning style and give you personalized tips to ace your studies!
+                </p>
+                <button class="btn" onclick="startQuiz()">
+                    <i class="fas fa-play"></i>
+                    Start Quiz
+                </button>
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-home"></i>
+                    Back to Home
+                </a>
+            </div>
+
+            <!-- Questions -->
+            <div class="question-container" id="question1">
+                <div class="question-number">Question 1 of 5</div>
+                <div class="question-text">When you have a big test coming up, you:</div>
+                <div class="options-container">
+                    <div class="option" data-letter="A" data-value="A" onclick="selectOption(this, 'A')">
+                        <div class="option-text">Make detailed study notes and flashcards</div>
+                    </div>
+                    <div class="option" data-letter="B" data-value="B" onclick="selectOption(this, 'B')">
+                        <div class="option-text">Study with friends in a group</div>
+                    </div>
+                    <div class="option" data-letter="C" data-value="C" onclick="selectOption(this, 'C')">
+                        <div class="option-text">Review everything the night before</div>
+                    </div>
+                    <div class="option" data-letter="D" data-value="D" onclick="selectOption(this, 'D')">
+                        <div class="option-text">Find videos and interactive content online</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-container" id="question2">
+                <div class="question-number">Question 2 of 5</div>
+                <div class="question-text">Your ideal study environment is:</div>
+                <div class="options-container">
+                    <div class="option" data-letter="A" data-value="A" onclick="selectOption(this, 'A')">
+                        <div class="option-text">A quiet library with everything organized</div>
+                    </div>
+                    <div class="option" data-letter="B" data-value="B" onclick="selectOption(this, 'B')">
+                        <div class="option-text">A coffee shop or common area with people around</div>
+                    </div>
+                    <div class="option" data-letter="C" data-value="C" onclick="selectOption(this, 'C')">
+                        <div class="option-text">Your room late at night when it's quiet</div>
+                    </div>
+                    <div class="option" data-letter="D" data-value="D" onclick="selectOption(this, 'D')">
+                        <div class="option-text">Anywhere with your laptop and good WiFi</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-container" id="question3">
+                <div class="question-number">Question 3 of 5</div>
+                <div class="question-text">When learning something new, you prefer to:</div>
+                <div class="options-container">
+                    <div class="option" data-letter="A" data-value="A" onclick="selectOption(this, 'A')">
+                        <div class="option-text">Read the textbook and take detailed notes</div>
+                    </div>
+                    <div class="option" data-letter="B" data-value="B" onclick="selectOption(this, 'B')">
+                        <div class="option-text">Discuss it with classmates and teachers</div>
+                    </div>
+                    <div class="option" data-letter="C" data-value="C" onclick="selectOption(this, 'C')">
+                        <div class="option-text">Jump in and figure it out as you go</div>
+                    </div>
+                    <div class="option" data-letter="D" data-value="D" onclick="selectOption(this, 'D')">
+                        <div class="option-text">Watch YouTube videos and try interactive tutorials</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-container" id="question4">
+                <div class="question-number">Question 4 of 5</div>
+                <div class="question-text">Your approach to organizing school work is:</div>
+                <div class="options-container">
+                    <div class="option" data-letter="A" data-value="A" onclick="selectOption(this, 'A')">
+                        <div class="option-text">Color-coded folders and detailed planners</div>
+                    </div>
+                    <div class="option" data-letter="B" data-value="B" onclick="selectOption(this, 'B')">
+                        <div class="option-text">Shared Google docs and study group calendars</div>
+                    </div>
+                    <div class="option" data-letter="C" data-value="C" onclick="selectOption(this, 'C')">
+                        <div class="option-text">Mental notes and last-minute organization</div>
+                    </div>
+                    <div class="option" data-letter="D" data-value="D" onclick="selectOption(this, 'D')">
+                        <div class="option-text">Digital apps and cloud storage for everything</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-container" id="question5">
+                <div class="question-number">Question 5 of 5</div>
+                <div class="question-text">What motivates you most when studying?</div>
+                <div class="options-container">
+                    <div class="option" data-letter="A" data-value="A" onclick="selectOption(this, 'A')">
+                        <div class="option-text">Achieving your planned goals and checking items off lists</div>
+                    </div>
+                    <div class="option" data-letter="B" data-value="B" onclick="selectOption(this, 'B')">
+                        <div class="option-text">Helping friends succeed and group achievements</div>
+                    </div>
+                    <div class="option" data-letter="C" data-value="C" onclick="selectOption(this, 'C')">
+                        <div class="option-text">The thrill of pulling everything together at the end</div>
+                    </div>
+                    <div class="option" data-letter="D" data-value="D" onclick="selectOption(this, 'D')">
+                        <div class="option-text">Discovering cool new ways to learn and understand</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results-screen" id="resultsScreen">
+                <div class="result-icon" id="resultIcon"></div>
+                <h2 class="result-title" id="resultTitle"></h2>
+                <div class="result-subtitle" id="resultSubtitle"></div>
+                <p class="result-description" id="resultDescription"></p>
+                
+                <div class="result-traits" id="resultTraits">
+                    <!-- Traits will be populated by JavaScript -->
+                </div>
+
+                <div class="share-buttons">
+                    <a href="#" class="share-btn share-twitter" onclick="shareResult('twitter')">
+                        <i class="fab fa-twitter"></i>
+                        Tweet
+                    </a>
+                    <a href="#" class="share-btn share-facebook" onclick="shareResult('facebook')">
+                        <i class="fab fa-facebook"></i>
+                        Share
+                    </a>
+                    <a href="#" class="share-btn share-linkedin" onclick="shareResult('linkedin')">
+                        <i class="fab fa-linkedin"></i>
+                        Post
+                    </a>
+                    <button class="share-btn share-copy" onclick="copyResult()">
+                        <i class="fas fa-copy"></i>
+                        Copy
+                    </button>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <button class="btn" onclick="restartQuiz()">
+                        <i class="fas fa-redo"></i>
+                        Take Again
+                    </button>
+                    <a href="workshop.html" class="btn btn-secondary">
+                        <i class="fas fa-book-open"></i>
+                        Learn to Build This
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-footer" id="quizFooter">
+            <div class="question-counter" id="questionCounter">
+                Question 1 of 5
+            </div>
+            <div>
+                <small style="color: var(--text-secondary);">
+                    Built with AI • <a href="workshop.html" style="color: var(--primary-color);">Learn How</a>
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz state
+        let currentQuestion = 0;
+        let answers = [];
+        let quizStarted = false;
+
+        // Question data
+        const questions = [
+            {
+                question: "When you have a big test coming up, you:",
+                options: [
+                    { letter: "A", text: "Make detailed study notes and flashcards" },
+                    { letter: "B", text: "Study with friends in a group" },
+                    { letter: "C", text: "Review everything the night before" },
+                    { letter: "D", text: "Find videos and interactive content online" }
+                ]
+            },
+            {
+                question: "Your ideal study environment is:",
+                options: [
+                    { letter: "A", text: "A quiet library with everything organized" },
+                    { letter: "B", text: "A coffee shop or common area with people around" },
+                    { letter: "C", text: "Your room late at night when it's quiet" },
+                    { letter: "D", text: "Anywhere with your laptop and good WiFi" }
+                ]
+            },
+            {
+                question: "When learning something new, you prefer to:",
+                options: [
+                    { letter: "A", text: "Read the textbook and take detailed notes" },
+                    { letter: "B", text: "Discuss it with classmates and teachers" },
+                    { letter: "C", text: "Jump in and figure it out as you go" },
+                    { letter: "D", text: "Watch YouTube videos and try interactive tutorials" }
+                ]
+            },
+            {
+                question: "Your approach to organizing school work is:",
+                options: [
+                    { letter: "A", text: "Color-coded folders and detailed planners" },
+                    { letter: "B", text: "Shared Google docs and study group calendars" },
+                    { letter: "C", text: "Mental notes and last-minute organization" },
+                    { letter: "D", text: "Digital apps and cloud storage for everything" }
+                ]
+            },
+            {
+                question: "What motivates you most when studying?",
+                options: [
+                    { letter: "A", text: "Achieving your planned goals and checking items off lists" },
+                    { letter: "B", text: "Helping friends succeed and group achievements" },
+                    { letter: "C", text: "The thrill of pulling everything together at the end" },
+                    { letter: "D", text: "Discovering cool new ways to learn and understand" }
+                ]
+            }
+        ];
+
+        // Results data
+        const results = {
+            A: {
+                title: "The Organizer",
+                subtitle: "You're a structured and systematic learner! 📋",
+                icon: "🗂️",
+                description: "You thrive on organization, planning, and detailed preparation. Your methodical approach helps you break down complex topics into manageable chunks, making you a reliable and consistent student.",
+                traits: [
+                    { icon: "📝", text: "Loves detailed notes and planners" },
+                    { icon: "⏰", text: "Plans study sessions in advance" },
+                    { icon: "🎯", text: "Goal-oriented and systematic" },
+                    { icon: "📚", text: "Prefers traditional study methods" }
+                ]
+            },
+            B: {
+                title: "The Collaborator",
+                subtitle: "You learn best through social interaction! 👥",
+                icon: "🤝",
+                description: "You're energized by working with others and learning through discussion. Your ability to explain concepts to peers and learn from group dynamics makes you a valuable team player in academic settings.",
+                traits: [
+                    { icon: "💬", text: "Enjoys group discussions" },
+                    { icon: "🤝", text: "Learns through teaching others" },
+                    { icon: "📱", text: "Uses collaborative tools" },
+                    { icon: "🌟", text: "Motivated by group success" }
+                ]
+            },
+            C: {
+                title: "The Last-Minute Hero",
+                subtitle: "You work best under pressure! ⚡",
+                icon: "🔥",
+                description: "You have an amazing ability to focus intensely when deadlines approach. Your adaptability and ability to think quickly under pressure often leads to impressive last-minute achievements.",
+                traits: [
+                    { icon: "⚡", text: "Performs well under pressure" },
+                    { icon: "🎯", text: "Intense focus when needed" },
+                    { icon: "🔄", text: "Highly adaptable" },
+                    { icon: "🚀", text: "Quick decision maker" }
+                ]
+            },
+            D: {
+                title: "The Digital Native",
+                subtitle: "You embrace technology in learning! 💻",
+                icon: "🌐",
+                description: "You're comfortable with digital tools and prefer interactive, multimedia learning experiences. Your ability to navigate and utilize online resources gives you access to diverse learning opportunities.",
+                traits: [
+                    { icon: "💻", text: "Tech-savvy learner" },
+                    { icon: "🎥", text: "Prefers multimedia content" },
+                    { icon: "🔍", text: "Great at finding online resources" },
+                    { icon: "⚡", text: "Quick to adapt to new tools" }
+                ]
+            }
+        };
+
+        // Functions
+        function startQuiz() {
+            quizStarted = true;
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('question1').classList.add('active');
+            updateProgress();
+            updateFooter();
+        }
+
+        function selectOption(element, value) {
+            // Remove selection from other options
+            const options = element.parentNode.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            // Add selection to clicked option
+            element.classList.add('selected');
+            
+            // Store answer
+            answers[currentQuestion] = value;
+            
+            // Auto-advance after a short delay
+            setTimeout(() => {
+                nextQuestion();
+            }, 800);
+        }
+
+        function nextQuestion() {
+            const currentQuestionElement = document.getElementById(`question${currentQuestion + 1}`);
+            currentQuestionElement.classList.remove('active');
+            
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                const nextQuestionElement = document.getElementById(`question${currentQuestion + 1}`);
+                nextQuestionElement.classList.add('active');
+                updateProgress();
+                updateFooter();
+            } else {
+                showResults();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function updateFooter() {
+            if (quizStarted && currentQuestion < questions.length) {
+                document.getElementById('questionCounter').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            }
+        }
+
+        function showResults() {
+            // Calculate most frequent answer
+            const counts = { A: 0, B: 0, C: 0, D: 0 };
+            answers.forEach(answer => {
+                counts[answer]++;
+            });
+            
+            const result = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+            const resultData = results[result];
+            
+            // Hide all questions
+            for (let i = 1; i <= questions.length; i++) {
+                document.getElementById(`question${i}`).style.display = 'none';
+            }
+            
+            // Update progress to 100%
+            document.getElementById('progressFill').style.width = '100%';
+            
+            // Show results
+            document.getElementById('resultIcon').textContent = resultData.icon;
+            document.getElementById('resultTitle').textContent = resultData.title;
+            document.getElementById('resultSubtitle').textContent = resultData.subtitle;
+            document.getElementById('resultDescription').textContent = resultData.description;
+            
+            // Add traits
+            const traitsContainer = document.getElementById('resultTraits');
+            traitsContainer.innerHTML = '';
+            resultData.traits.forEach(trait => {
+                const traitElement = document.createElement('div');
+                traitElement.className = 'trait';
+                traitElement.innerHTML = `
+                    <div class="trait-icon">${trait.icon}</div>
+                    <div class="trait-text">${trait.text}</div>
+                `;
+                traitsContainer.appendChild(traitElement);
+            });
+            
+            // Update footer
+            document.getElementById('questionCounter').textContent = 'Quiz Complete!';
+            
+            // Show results screen
+            document.getElementById('resultsScreen').classList.add('active');
+            
+            // Store result for sharing
+            window.currentResult = { type: result, data: resultData };
+        }
+
+        function restartQuiz() {
+            // Reset state
+            currentQuestion = 0;
+            answers = [];
+            quizStarted = false;
+            
+            // Hide results
+            document.getElementById('resultsScreen').classList.remove('active');
+            
+            // Reset all questions
+            for (let i = 1; i <= questions.length; i++) {
+                const questionElement = document.getElementById(`question${i}`);
+                questionElement.style.display = 'block';
+                questionElement.classList.remove('active');
+                
+                // Clear selections
+                const options = questionElement.querySelectorAll('.option');
+                options.forEach(option => option.classList.remove('selected'));
+            }
+            
+            // Show welcome screen
+            document.getElementById('welcomeScreen').style.display = 'block';
+            
+            // Reset progress
+            document.getElementById('progressFill').style.width = '0%';
+            
+            // Reset footer
+            document.getElementById('questionCounter').textContent = 'Question 1 of 5';
+        }
+
+        function shareResult(platform) {
+            if (!window.currentResult) return;
+            
+            const { type, data } = window.currentResult;
+            const text = `I just discovered I'm "${data.title}" in my study style! ${data.subtitle}`;
+            const url = window.location.href;
+            
+            let shareUrl = '';
+            
+            switch (platform) {
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+                    break;
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+            }
+        }
+
+        function copyResult() {
+            if (!window.currentResult) return;
+            
+            const { data } = window.currentResult;
+            const text = `I just discovered I'm "${data.title}" in my study style! ${data.subtitle}\n\nTake the quiz: ${window.location.href}`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const button = event.target.closest('.share-copy');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.style.background = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = 'var(--success-color)';
+                }, 2000);
+            }).catch(() => {
+                alert('Could not copy to clipboard. Please copy the URL manually.');
+            });
+        }
+
+        // Add keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '1' && e.key <= '4' && quizStarted && currentQuestion < questions.length) {
+                const optionIndex = parseInt(e.key) - 1;
+                const currentQuestionElement = document.getElementById(`question${currentQuestion + 1}`);
+                if (currentQuestionElement && currentQuestionElement.classList.contains('active')) {
+                    const options = currentQuestionElement.querySelectorAll('.option');
+                    if (options[optionIndex]) {
+                        options[optionIndex].click();
+                    }
+                }
+            }
+        });
+
+        // Add loading states for slow connections
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.btn, .option').forEach(element => {
+                element.style.opacity = '1';
+            });
+        });
+    </script>
+</body>
+</html>

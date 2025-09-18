@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Coding Introduction Workshop - AI Coding For Kids</title>
+    <meta name="description" content="Complete 2-hour workshop guide for teaching high school students to build web applications using AI tools like Claude Sonnet 4.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .workshop-nav {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 4rem;
+            z-index: 999;
+        }
+        
+        .workshop-nav-content {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .workshop-nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            white-space: nowrap;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+            min-width: fit-content;
+        }
+        
+        .workshop-nav-item:hover,
+        .workshop-nav-item.active {
+            background: var(--primary-color);
+            color: var(--text-white);
+        }
+        
+        .workshop-section {
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .workshop-section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .time-badge {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--text-white);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .difficulty-badge {
+            background: var(--success-color);
+            color: var(--text-white);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .code-block {
+            background: var(--bg-dark);
+            color: #e5e7eb;
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: attr(data-label);
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            background: var(--primary-color);
+            color: var(--text-white);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .prompt-box {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin: 1rem 0;
+        }
+        
+        .prompt-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .teaching-moment {
+            background: linear-gradient(135deg, #fef3ff, #f3e8ff);
+            border-left: 4px solid var(--secondary-color);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin: 1rem 0;
+        }
+        
+        .teaching-moment h4 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            margin: 2rem 0;
+        }
+        
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 4rem;
+        }
+        
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--text-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+        
+        .features-checklist {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-normal);
+        }
+        
+        .checklist-item:hover {
+            background: var(--bg-accent);
+            transform: translateY(-2px);
+        }
+        
+        .checklist-item i {
+            color: var(--success-color);
+            font-size: 1.125rem;
+        }
+        
+        .troubleshooting {
+            background: linear-gradient(135deg, #fff7ed, #fef3c7);
+            border-left: 4px solid var(--warning-color);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin: 2rem 0;
+        }
+        
+        .troubleshooting h4 {
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .personality-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .personality-card {
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all var(--transition-normal);
+        }
+        
+        .personality-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .personality-card h5 {
+            color: var(--primary-color);
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .personality-card .type-letter {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--text-white);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-normal);
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-2px) scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .workshop-nav-content {
+                gap: 1rem;
+            }
+            
+            .step-list li {
+                padding-left: 3rem;
+            }
+            
+            .step-list li::before {
+                width: 2rem;
+                height: 2rem;
+                font-size: 1rem;
+            }
+            
+            .features-checklist {
+                grid-template-columns: 1fr;
+            }
+            
+            .personality-types {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-robot"></i>
+                <span>AI Coding For Kids</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#workshops" class="nav-link">Workshops</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="quiz-demo.html" class="nav-link demo-btn">Try Demo</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="workshop-nav">
+        <div class="container">
+            <div class="workshop-nav-content">
+                <a href="#overview" class="workshop-nav-item">Overview</a>
+                <a href="#hour1" class="workshop-nav-item">Hour 1: Foundations</a>
+                <a href="#hour2" class="workshop-nav-item">Hour 2: Building</a>
+                <a href="#wrap-up" class="workshop-nav-item">Wrap-up</a>
+                <a href="#teaching-notes" class="workshop-nav-item">Teaching Notes</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="container">
+        <!-- Header -->
+        <section class="workshop-section" id="overview">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Complete Workshop Guide</span>
+                </div>
+                <h1>2-Hour AI Coding Introduction</h1>
+                <p class="hero-description">
+                    A comprehensive workshop designed for high school students with mixed tech experience. 
+                    Students will learn to use AI as a coding partner to build a fun, interactive "Personality Quiz App".
+                </p>
+                
+                <div class="section-meta">
+                    <div class="time-badge">
+                        <i class="fas fa-clock"></i>
+                        2 Hours Total
+                    </div>
+                    <div class="difficulty-badge">
+                        <i class="fas fa-user-friends"></i>
+                        Mixed Experience Levels
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-checklist">
+                <div class="checklist-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>No prior coding experience needed</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Works on PC and Mac</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Browser-based - no downloads</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Build a complete web application</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hour 1 -->
+        <section class="workshop-section" id="hour1">
+            <h2><i class="fas fa-play-circle"></i> Hour 1: AI Coding Foundations</h2>
+            
+            <!-- Opening -->
+            <div class="subsection">
+                <h3>Opening (10 minutes)</h3>
+                <div class="section-meta">
+                    <div class="time-badge">10 min</div>
+                </div>
+                
+                <div class="prompt-box">
+                    <h4><i class="fas fa-rocket"></i> Hook Activity</h4>
+                    <p><strong>Show a completed version of the quiz app</strong></p>
+                    <ul>
+                        <li>"By the end of today, you'll build this yourself using AI as your coding partner"</li>
+                        <li>Quick poll: "Who has coded before?" / "Who has used AI tools?"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Segment 1 -->
+            <div class="subsection">
+                <h3>Segment 1: Meet Your AI Coding Partner (20 minutes)</h3>
+                <div class="section-meta">
+                    <div class="time-badge">20 min</div>
+                </div>
+
+                <h4>What is Claude Sonnet 4?</h4>
+                <ul>
+                    <li>AI (Artificial Intelligence) assistant that understands and writes code</li>
+                    <li>Think of it as having a super-smart coding tutor available 24/7</li>
+                    <li>Works in your web browser - no downloads needed (PC and Mac friendly)</li>
+                </ul>
+
+                <div class="prompt-box">
+                    <h4><i class="fas fa-comments"></i> Demo: First Interaction</h4>
+                    <div class="code-block" data-label="Try This">
+Hi! I'm new to coding. Can you explain what HTML is in simple terms?
+                    </div>
+                </div>
+
+                <div class="teaching-moment">
+                    <h4><i class="fas fa-lightbulb"></i> Key Teaching Point</h4>
+                    <p>AI responds to natural language - talk to it like a helpful person!</p>
+                </div>
+            </div>
+
+            <!-- Segment 2 -->
+            <div class="subsection">
+                <h3>Segment 2: Basic Coding Prompts (30 minutes)</h3>
+                <div class="section-meta">
+                    <div class="time-badge">30 min</div>
+                </div>
+
+                <h4>The Art of Asking AI for Code</h4>
+
+                <div class="prompt-box">
+                    <h4><i class="fas fa-target"></i> Prompt Pattern 1: Be Specific</h4>
+                    <div class="code-block" data-label="Bad Example">
+Make a website
+                    </div>
+                    <div class="code-block" data-label="Good Example">
+Create a simple HTML page with a blue background and a heading that says 'Welcome to My Site'
+                    </div>
+                </div>
+
+                <p><strong>Hands-on Practice:</strong> Students try both prompts and see the difference</p>
+
+                <div class="prompt-box">
+                    <h4><i class="fas fa-question-circle"></i> Prompt Pattern 2: Ask for Explanations</h4>
+                    <div class="code-block" data-label="Try This">
+Create a button in HTML and explain what each part does
+                    </div>
+                </div>
+
+                <div class="teaching-moment">
+                    <h4><i class="fas fa-users"></i> Student Practice Round (10 minutes)</h4>
+                    <ul>
+                        <li>Students experiment with different prompts</li>
+                        <li>Peer sharing: "What's the coolest thing it made for you?"</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hour 2 -->
+        <section class="workshop-section" id="hour2">
+            <h2><i class="fas fa-code"></i> Hour 2: Building the Personality Quiz App</h2>
+
+            <!-- Segment 3 -->
+            <div class="subsection">
+                <h3>Segment 3: Project Planning (10 minutes)</h3>
+                <div class="section-meta">
+                    <div class="time-badge">10 min</div>
+                </div>
+
+                <h4><i class="fas fa-bullseye"></i> Our Goal: Build a "What's Your Study Style?" quiz app</h4>
+
+                <div class="features-checklist">
+                    <div class="checklist-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Welcome page with app title</span>
+                    </div>
+                    <div class="checklist-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>5 multiple-choice questions</span>
+                    </div>
+                    <div class="checklist-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Personalized results based on answers</span>
+                    </div>
+                    <div class="checklist-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Colorful, mobile-friendly design</span>
+                    </div>
+                    <div class="checklist-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Fun animations/effects</span>
+                    </div>
+                </div>
+
+                <h4><i class="fas fa-list-ol"></i> The AI Development Process:</h4>
+                <ol class="step-list">
+                    <li><strong>Start with basic structure</strong> - Get the foundation right</li>
+                    <li><strong>Add questions one by one</strong> - Build incrementally</li>
+                    <li><strong>Create the scoring system</strong> - Make it interactive</li>
+                    <li><strong>Make it look awesome</strong> - Polish the design</li>
+                    <li><strong>Add special effects</strong> - Enhance user experience</li>
+                </ol>
+            </div>
+
+            <!-- Segment 4 -->
+            <div class="subsection">
+                <h3>Segment 4: Guided Building Session (40 minutes)</h3>
+                <div class="section-meta">
+                    <div class="time-badge">40 min</div>
+                </div>
+
+                <!-- Step 1 -->
+                <div class="step-container">
+                    <h4><i class="fas fa-foundation"></i> Step 1: Foundation (8 minutes)</h4>
+                    <div class="prompt-box">
+                        <h4><i class="fas fa-code"></i> Prompt to Use</h4>
+                        <div class="code-block" data-label="Copy This">
+Create an HTML page for a personality quiz called 'What's Your Study Style?'. For now, just include a welcome message, a start button, and make it look modern with CSS. Use colors that appeal to high school students. We'll add more functionality later
+                        </div>
+                    </div>
+                    
+                    <div class="teaching-moment">
+                        <h4><i class="fas fa-lightbulb"></i> Teaching Moment</h4>
+                        <p>Point out the HTML (structure), CSS (styling), and JavaScript (interactivity) in Claude's response</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-container">
+                    <h4><i class="fas fa-question-circle"></i> Step 2: Adding Questions (10 minutes)</h4>
+                    <div class="prompt-box">
+                        <h4><i class="fas fa-code"></i> Prompt to Use</h4>
+                        <div class="code-block" data-label="Copy This">
+Add the first quiz question: 'When you have a big test coming up, you:' with 4 multiple choice options:
+A) Make detailed study notes and flashcards
+B) Study with friends in a group
+C) Review everything the night before
+D) Find videos and interactive content online
+Make each option clickable.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-container">
+                    <h4><i class="fas fa-list-alt"></i> Step 3: Building the Full Quiz (10 minutes)</h4>
+                    <div class="prompt-box">
+                        <h4><i class="fas fa-code"></i> Prompt to Use</h4>
+                        <div class="code-block" data-label="Copy This">
+Add 4 more questions about study habits, preferred learning times, organization style, and motivation. Keep the same 4-option format but vary the content. Use what you know about the psychology of learning where question A's describes an Organizer, B's Collaborator, C's Procrastinator, D's Digital Native.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-container">
+                    <h4><i class="fas fa-trophy"></i> Step 4: Results System (10 minutes)</h4>
+                    <div class="prompt-box">
+                        <h4><i class="fas fa-code"></i> Prompt to Use</h4>
+                        <div class="code-block" data-label="Copy This">
+Create a scoring system that tracks which letter (A, B, C, or D) the user picks most often, then shows a personalized result:
+- Mostly A's: 'The Organizer' - detailed description
+- Mostly B's: 'The Collaborator' - detailed description  
+- Mostly C's: 'The Last-Minute Hero' - detailed description
+- Mostly D's: 'The Digital Native' - detailed description
+Include fun emojis and encouraging messages.
+                        </div>
+                    </div>
+
+                    <div class="personality-types">
+                        <div class="personality-card">
+                            <div class="type-letter">A</div>
+                            <h5>The Organizer</h5>
+                            <p>Methodical, detailed, and loves structure in their learning approach.</p>
+                        </div>
+                        <div class="personality-card">
+                            <div class="type-letter">B</div>
+                            <h5>The Collaborator</h5>
+                            <p>Social learner who thrives in group settings and peer discussions.</p>
+                        </div>
+                        <div class="personality-card">
+                            <div class="type-letter">C</div>
+                            <h5>The Last-Minute Hero</h5>
+                            <p>Works best under pressure and pulls through with intense focus.</p>
+                        </div>
+                        <div class="personality-card">
+                            <div class="type-letter">D</div>
+                            <h5>The Digital Native</h5>
+                            <p>Tech-savvy learner who prefers multimedia and interactive content.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="step-container">
+                    <h4><i class="fas fa-magic"></i> Step 5: Polish and Effects (2 minutes)</h4>
+                    <div class="prompt-box">
+                        <h4><i class="fas fa-code"></i> Prompt to Use</h4>
+                        <div class="code-block" data-label="Copy This">
+Add smooth transitions between questions, a progress bar, and make the results page more visually exciting with animations and better colors.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Segment 5 -->
+            <div class="subsection">
+                <h3>Segment 5: Customization and Debugging (10 minutes)</h3>
+                <div class="section-meta">
+                    <div class="time-badge">10 min</div>
+                </div>
+
+                <h4><i class="fas fa-palette"></i> Make It Your Own</h4>
+                <ul>
+                    <li>Students modify colors, questions, or results</li>
+                    <li>Add personal touches (school name, inside jokes, etc.)</li>
+                </ul>
+
+                <div class="troubleshooting">
+                    <h4><i class="fas fa-tools"></i> Common Issues & AI Solutions</h4>
+                    <ul>
+                        <li><strong>"My button doesn't work"</strong> → Ask AI to debug</li>
+                        <li><strong>"I want different colors"</strong> → Ask AI to modify CSS</li>
+                        <li><strong>"Can you make it look more like TikTok/Instagram?"</strong> → Describe the style you want</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-box">
+                    <h4><i class="fas fa-bug"></i> Sample Debugging Prompt</h4>
+                    <div class="code-block" data-label="Try This">
+My quiz isn't working properly. When I click an answer, nothing happens. Can you help me fix it and explain what went wrong?
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wrap-up -->
+        <section class="workshop-section" id="wrap-up">
+            <h2><i class="fas fa-flag-checkered"></i> Wrap-up and Next Steps (10 minutes)</h2>
+
+            <div class="subsection">
+                <h3><i class="fas fa-presentation"></i> Show and Tell (5 minutes)</h3>
+                <ul>
+                    <li>Students share their quiz apps</li>
+                    <li>Highlight creative modifications</li>
+                    <li>Celebrate different approaches</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <h3><i class="fas fa-key"></i> Key Takeaways (3 minutes)</h3>
+                <div class="features-checklist">
+                    <div class="checklist-item">
+                        <i class="fas fa-lightbulb"></i>
+                        <span><strong>AI is a powerful coding partner, not a replacement for learning</strong></span>
+                    </div>
+                    <div class="checklist-item">
+                        <i class="fas fa-comments"></i>
+                        <span><strong>Good prompts = better results</strong> (be specific, ask for explanations)</span>
+                    </div>
+                    <div class="checklist-item">
+                        <i class="fas fa-sync-alt"></i>
+                        <span><strong>Iteration is key</strong> - build, test, improve, repeat</span>
+                    </div>
+                    <div class="checklist-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span><strong>Don't be afraid to experiment and ask questions</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3><i class="fas fa-rocket"></i> Continue Your Journey (2 minutes)</h3>
+                <h4>What's Next:</h4>
+                <ul>
+                    <li>Practice with different types of apps (games, calculators, creative tools)</li>
+                    <li>Learn to read and modify the code AI creates</li>
+                    <li>Explore other programming languages (Python, JavaScript frameworks)</li>
+                    <li>Join coding communities and continue learning</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Teaching Notes -->
+        <section class="workshop-section" id="teaching-notes">
+            <h2><i class="fas fa-chalkboard-teacher"></i> Teaching Notes</h2>
+
+            <div class="subsection">
+                <h3><i class="fas fa-layer-group"></i> For Mixed Experience Levels</h3>
+                <div class="personality-types">
+                    <div class="personality-card">
+                        <h5>Beginners</h5>
+                        <p>Focus on understanding prompts and seeing code work. Don't worry about syntax details.</p>
+                    </div>
+                    <div class="personality-card">
+                        <h5>Experienced</h5>
+                        <p>Challenge them to modify Claude's code or ask for advanced features.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3><i class="fas fa-cogs"></i> Technical Requirements</h3>
+                <div class="features-checklist">
+                    <div class="checklist-item">
+                        <i class="fas fa-wifi"></i>
+                        <span>Reliable internet connection</span>
+                    </div>
+                    <div class="checklist-item">
+                        <i class="fas fa-browser"></i>
+                        <span>Modern web browser (Chrome, Firefox, Safari, Edge)</span>
+                    </div>
+                    <div class="checklist-item">
+                        <i class="fas fa-download"></i>
+                        <span>No software installation needed</span>
+                    </div>
+                    <div class="checklist-item">
+                        <i class="fas fa-desktop"></i>
+                        <span>Works identically on PC and Mac</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3><i class="fas fa-life-ring"></i> Backup Plans</h3>
+                <div class="troubleshooting">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Common Scenarios</h4>
+                    <ul>
+                        <li><strong>If AI is slow:</strong> Have pre-made code snippets ready</li>
+                        <li><strong>If students finish early:</strong> Challenge them to add new features</li>
+                        <li><strong>If someone gets stuck:</strong> Pair them with a peer or use it as a teaching moment</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3><i class="fas fa-clipboard-check"></i> Assessment Ideas</h3>
+                <ul>
+                    <li>Can they successfully prompt AI to create code?</li>
+                    <li>Do they understand the basic structure of their app?</li>
+                    <li>Can they make simple modifications?</li>
+                    <li>Are they thinking about how to improve their prompts?</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <h3><i class="fas fa-plus-circle"></i> Extension Activities</h3>
+                <ul>
+                    <li>Create different quiz themes (movie preferences, career matcher, etc.)</li>
+                    <li>Add social sharing features</li>
+                    <li>Make the app mobile-responsive</li>
+                    <li>Connect multiple apps together</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta">
+            <div class="cta-content">
+                <h2>Ready to Start Teaching?</h2>
+                <p>Try the demo quiz app to see what your students will build</p>
+                <div class="cta-buttons">
+                    <a href="quiz-demo.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-play"></i>
+                        Try the Demo
+                    </a>
+                    <a href="index.html" class="btn btn-outline btn-lg">
+                        <i class="fas fa-home"></i>
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Coding For Kids</span>
+                    </div>
+                    <p>Empowering the next generation with AI-powered coding education.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Workshop Resources</h4>
+                    <ul>
+                        <li><a href="#overview">Workshop Overview</a></li>
+                        <li><a href="#hour1">Hour 1: Foundations</a></li>
+                        <li><a href="#hour2">Hour 2: Building</a></li>
+                        <li><a href="#teaching-notes">Teaching Notes</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="quiz-demo.html">Demo</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 AI Coding For Kids. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+    <script>
+        // Workshop-specific JavaScript
+        
+        // Smooth navigation for workshop sections
+        document.querySelectorAll('.workshop-nav-item').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all nav items
+                document.querySelectorAll('.workshop-nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Smooth scroll to target
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 160; // Account for fixed navbars
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Update active nav item on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.workshop-section');
+            const navItems = document.querySelectorAll('.workshop-nav-item');
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 180;
+                if (window.pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === `#${current}`) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Show/hide back to top button
+            const backToTop = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        // Back to top functionality
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Copy code functionality
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(block.textContent.trim());
+                    
+                    // Visual feedback
+                    const originalBg = block.style.background;
+                    block.style.background = 'var(--success-color)';
+                    block.style.transition = 'background 0.2s';
+                    
+                    setTimeout(() => {
+                        block.style.background = originalBg;
+                    }, 500);
+                    
+                } catch (err) {
+                    console.log('Failed to copy text');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
