@@ -1,21 +1,16 @@
 {
-  "version": 2,
-  "routes": [
+  "rewrites": [
     {
-      "src": "/",
-      "dest": "/index.html"
+      "source": "/workshop",
+      "destination": "/workshop.html"
     },
     {
-      "src": "/workshop",
-      "dest": "/workshop.html"
+      "source": "/quiz-demo",
+      "destination": "/quiz-demo.html"
     },
     {
-      "src": "/quiz-demo",
-      "dest": "/quiz-demo.html"
-    },
-    {
-      "src": "/quiz",
-      "dest": "/quiz-demo.html"
+      "source": "/quiz",
+      "destination": "/quiz-demo.html"
     }
   ],
   "headers": [
