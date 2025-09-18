@@ -1,20 +1,5 @@
 {
   "version": 2,
-  "name": "ai-coding-for-kids",
-  "builds": [
-    {
-      "src": "*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.js",
-      "use": "@vercel/static"
-    }
-  ],
   "routes": [
     {
       "src": "/",
@@ -76,10 +61,5 @@
       "destination": "/quiz-demo",
       "permanent": true
     }
-  ],
-  "functions": {
-    "*.html": {
-      "includeFiles": "**"
-    }
-  }
+  ]
 }
