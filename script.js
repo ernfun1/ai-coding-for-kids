@@ -268,3 +268,125 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+// Tech Modal Functionality
+const techData = {
+    html: {
+        icon: 'fab fa-html5',
+        title: 'HTML - The Skeleton',
+        description: 'Think of HTML like the skeleton of a house! It creates the basic structure of every webpage you\'ve ever visited. Just like how a house needs walls, rooms, and doors, websites need headings, paragraphs, and buttons. HTML tells the browser "put a title here" and "add a picture there" - it\'s like giving instructions to build your digital creation!',
+        features: [
+            'Creates the structure and layout of web pages',
+            'Works like building blocks - stack elements to create anything',
+            'Easy to learn - it reads almost like regular English',
+            'Powers every website on the internet, from TikTok to YouTube'
+        ],
+        example: '&lt;h1&gt;Welcome to My Awesome Website!&lt;/h1&gt;\n&lt;p&gt;This is a paragraph where I can write anything.&lt;/p&gt;\n&lt;button&gt;Click Me!&lt;/button&gt;'
+    },
+    css: {
+        icon: 'fab fa-css3-alt',
+        title: 'CSS - The Artist',
+        description: 'If HTML is the skeleton, then CSS is the fashion designer! CSS makes websites look amazing with colors, animations, and cool effects. It\'s like having a magic paintbrush that can make text rainbow-colored, add hover effects, or make elements dance across the screen. Every beautiful website you love got its style from CSS!',
+        features: [
+            'Makes websites beautiful with colors, fonts, and layouts',
+            'Creates animations and interactive hover effects',
+            'Responsive design - makes sites look great on phones and computers',
+            'Turn a boring webpage into something Instagram-worthy'
+        ],
+        example: '.my-button {\n  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);\n  border-radius: 25px;\n  color: white;\n  transform: scale(1.1) when hovering;\n}'
+    },
+    javascript: {
+        icon: 'fab fa-js-square',
+        title: 'JavaScript - The Brain',
+        description: 'JavaScript is like the brain that makes websites smart and interactive! While HTML builds and CSS decorates, JavaScript makes things happen. Want a quiz that calculates your results? A button that responds when clicked? JavaScript is your superhero! It\'s the same language used to build apps like Discord, Spotify, and even smartphone apps.',
+        features: [
+            'Makes websites interactive and responsive to user actions',
+            'Powers modern web apps like Netflix, Instagram, and Discord',
+            'Can create games, quizzes, and dynamic content',
+            'Opens doors to mobile app development and even AI programming'
+        ],
+        example: 'function calculateQuizResult(answers) {\n  let score = answers.filter(answer => answer === "A").length;\n  if (score > 3) return "You\'re an Organizer!";\n  return "You\'re creative and spontaneous!";\n}'
+    },
+    ai: {
+        icon: 'fas fa-robot',
+        title: 'Claude AI - Your Coding Buddy',
+        description: 'Meet Claude, your AI coding assistant! Think of Claude like having a super-smart friend who knows everything about programming and never gets tired of helping you. You can ask Claude to write code, explain confusing parts, fix bugs, or even help you brainstorm cool project ideas. It\'s like having a coding mentor available 24/7 who speaks your language!',
+        features: [
+            'Writes code for you when you describe what you want',
+            'Explains complex programming concepts in simple terms',
+            'Helps debug and fix problems in your code',
+            'Never judges your questions - perfect for learning and experimenting'
+        ],
+        example: 'You: "Create a button that changes color when clicked"\n\nClaude: "Here\'s the HTML, CSS, and JavaScript code to make that happen, plus an explanation of how it works!"'
+    }
+};
+
+// Initialize tech modal functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('techModal');
+    const closeBtn = document.querySelector('.close-modal');
+    const techItems = document.querySelectorAll('.tech-item.clickable');
+    
+    // Add click event to each tech item
+    techItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const tech = item.getAttribute('data-tech');
+            showTechModal(tech);
+        });
+    });
+    
+    // Close modal when clicking X
+    closeBtn.addEventListener('click', closeTechModal);
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeTechModal();
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            closeTechModal();
+        }
+    });
+});
+
+function showTechModal(tech) {
+    const modal = document.getElementById('techModal');
+    const data = techData[tech];
+    
+    if (!data) return;
+    
+    // Update modal content
+    document.getElementById('modalIcon').className = `modal-icon ${data.icon}`;
+    document.getElementById('modalTitle').textContent = data.title;
+    document.getElementById('modalDescription').textContent = data.description;
+    
+    // Update features list
+    const featuresList = document.getElementById('modalFeatures');
+    featuresList.innerHTML = '';
+    data.features.forEach(feature => {
+        const li = document.createElement('li');
+        li.textContent = feature;
+        featuresList.appendChild(li);
+    });
+    
+    // Update example
+    document.getElementById('modalExample').innerHTML = data.example;
+    
+    // Show modal
+    modal.style.display = 'block';
+    
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+}
+
+function closeTechModal() {
+    const modal = document.getElementById('techModal');
+    modal.style.display = 'none';
+    
+    // Restore body scroll
+    document.body.style.overflow = 'auto';
+}

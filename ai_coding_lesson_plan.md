@@ -94,7 +94,7 @@ Make each option clickable."
 
 **Step 3: Building the Full Quiz (10 minutes)**
 ```
-Prompt: "Add 4 more questions about study habits, preferred learning times, organization style, and motivation. Keep the same 4-option format but vary the content. Use what you know about the psycology of learning where question A's describes an Organizer, B's Collaborator, C's Procrastinator, D's Digital Navite. 
+Prompt: "Add 5 questions about study approach, study habits, preferred learning times, organization style, and motivation. Use a 4-option multiple choice format but vary the content. Use what you know about the psycology of learning where answer  A's describes an Organizer, B's Collaborator, C's Procrastinator, D's Digital Navite. 
 ```
 
 **Step 4: Results System (10 minutes)**

@@ -259,21 +259,25 @@
                     </div>
                     <div class="about-visual">
                         <div class="tech-stack">
-                            <div class="tech-item">
+                            <div class="tech-item clickable" data-tech="html">
                                 <i class="fab fa-html5"></i>
                                 <span>HTML</span>
+                                <div class="click-hint">Click to learn more</div>
                             </div>
-                            <div class="tech-item">
+                            <div class="tech-item clickable" data-tech="css">
                                 <i class="fab fa-css3-alt"></i>
                                 <span>CSS</span>
+                                <div class="click-hint">Click to learn more</div>
                             </div>
-                            <div class="tech-item">
+                            <div class="tech-item clickable" data-tech="javascript">
                                 <i class="fab fa-js-square"></i>
                                 <span>JavaScript</span>
+                                <div class="click-hint">Click to learn more</div>
                             </div>
-                            <div class="tech-item">
+                            <div class="tech-item clickable" data-tech="ai">
                                 <i class="fas fa-robot"></i>
                                 <span>AI Assistant</span>
+                                <div class="click-hint">Click to learn more</div>
                             </div>
                         </div>
                     </div>
@@ -327,6 +331,28 @@
             </div>
         </div>
     </footer>
+
+    <!-- Tech Info Modal -->
+    <div class="tech-modal" id="techModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <i class="modal-icon" id="modalIcon"></i>
+                <h3 id="modalTitle"></h3>
+            </div>
+            <div class="modal-body">
+                <p id="modalDescription"></p>
+                <div class="modal-features">
+                    <h4>What makes it cool:</h4>
+                    <ul id="modalFeatures"></ul>
+                </div>
+                <div class="modal-example">
+                    <h4>Example:</h4>
+                    <code id="modalExample"></code>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
