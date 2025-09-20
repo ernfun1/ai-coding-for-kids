@@ -271,6 +271,19 @@ if ('serviceWorker' in navigator) {
 
 // Tech Modal Functionality
 const techData = {
+    vibe: {
+        icon: 'fas fa-user-graduate',
+        title: 'Vibe Coding - Inspired by Andrej Karpathy',
+        description: 'Meet the legend who makes AI education cool! Andrej Karpathy is a Slovak-Canadian computer scientist who co-founded OpenAI, directed AI at Tesla, and created Stanford\'s most popular deep learning course. In 2024, he started Eureka Labs to revolutionize AI education with his "Zero to Hero" series. His approach? Make complex AI concepts so clear and engaging that anyone can learn them. He proves that the best way to learn coding is to vibe with it - understanding the joy and creativity behind every line of code!',
+        features: [
+            'Co-founded OpenAI and directed AI development at Tesla',
+            'Created Stanford\'s CS231n - the most popular deep learning course ever',
+            'Makes complex AI concepts accessible through engaging teaching',
+            'Named one of Time Magazine\'s 100 Most Influential People in AI (2024)',
+            'Proves that learning to code should be fun, creative, and inspiring'
+        ],
+        example: '"The best way to learn deep learning is to get your hands dirty and build things. Don\'t just read about it - code it, break it, fix it, and make it your own!" - Andrej Karpathy Philosophy'
+    },
     html: {
         icon: 'fab fa-html5',
         title: 'HTML - The Skeleton',

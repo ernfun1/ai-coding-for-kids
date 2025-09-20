@@ -669,8 +669,10 @@ p {
 
 .tech-stack {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .tech-item {
@@ -731,6 +733,25 @@ p {
 .tech-item span {
     font-weight: 600;
     color: var(--text-primary);
+}
+
+.vibe-coding-card {
+    position: relative;
+}
+
+.karpathy-photo {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+    border: 3px solid var(--primary-color);
+    transition: all var(--transition-normal);
+}
+
+.vibe-coding-card:hover .karpathy-photo {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
 }
 
 /* Tech Modal */
@@ -1102,6 +1123,7 @@ p {
     }
 
     .tech-stack {
+        grid-template-columns: 1fr;
         max-width: 300px;
         margin: 0 auto;
     }
